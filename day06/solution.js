@@ -21,23 +21,9 @@ function processData(switchFunc) {
     });
 }
 
-// part 1
 processData(sw1);
-count = 0;
-for (let x = 0; x != 1000; ++x) {
-    for (let y = 0; y != 1000; ++y) {
-        if (mx[x][y] === 1) count++;
-    }
-}
-console.log(count);
+console.log('Part 1: ' + mx.flat().reduce((a, b) => a + b));
 
-// part 2
 mx = new Array(1000).fill(0).map(() => new Array(1000).fill(0));
 processData(sw2);
-count = 0;
-for (let x = 0; x != 1000; ++x) {
-    for (let y = 0; y != 1000; ++y) {
-        count += mx[x][y];
-    }
-}
-console.log(count);
+console.log('Part 2: ' + mx.flat().reduce((a, b) => a + b));
