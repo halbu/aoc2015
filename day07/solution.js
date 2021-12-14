@@ -1,21 +1,13 @@
-let d = require('fs').readFileSync('data.txt').toString().split("\n").map(x => x.trim());
-M = {};
+let d = require('fs').readFileSync('data.txt').toString().split("\n").map(x => x.trim()), M = {};
 
-// i could use actual bitwise operators for this but where's the fun in that. let's roll our own
 let d2b = (dec) => parseInt(dec).toString(2).padStart(16, '0');
-let bAnd = (a, b) => Array.from(Array(16).keys()).map(i => a.charAt(i) === '1' && b.charAt(i) === '1' ? '1' : '0').join('')
-let bOr = (a, b) => Array.from(Array(16).keys()).map(i => a.charAt(i) === '1' || b.charAt(i) === '1' ? '1' : '0').join('')
-let bNot = (s) => Array.from(s).map(x => x === '1' ? '0' : '1').join('');
-let bShiftL = (s, ox) => s.substr(ox).padEnd(16, '0')
-let bShiftR = (s, ox) => s.substr(0, s.length - ox).padStart(16, '0')
-
-function updateMap(target, gate, left, right) {
-    if (gate === "SET")      M[target] = left;
-    if (gate === "AND")      M[target] = bAnd(left, right);
-    if (gate === "OR")       M[target] = bOr(left, right)
-    if (gate === "NOT")      M[target] = bNot(right)
-    if (gate === "RSHIFT")   M[target] = bShiftR(left, right)
-    if (gate === "LSHIFT")   M[target] = bShiftL(left, right)
+let updateMap = (t, g, l, r) => { // i could use actual bitwise operators but where's the fun in that. let's roll our own
+    if (g === "SET")    M[t] = r;
+    if (g === "AND")    M[t] = [...Array(16).keys()].map(i => l.charAt(i) === '1' && r.charAt(i) === '1' ? '1' : '0').join('');
+    if (g === "OR")     M[t] = [...Array(16).keys()].map(i => l.charAt(i) === '1' || r.charAt(i) === '1' ? '1' : '0').join('');
+    if (g === "NOT")    M[t] = [...Array(16).keys()].map(i => r.charAt(i) === '1' ? '0' : '1').join('');
+    if (g === "RSHIFT") M[t] = l.substr(0, l.length - r).padStart(16, '0')
+    if (g === "LSHIFT") M[t] = l.substr(r).padEnd(16, '0')
 }
 
 while (d.length > 0) { // continually search the data for connections for which all inputs are valid
@@ -30,7 +22,7 @@ while (d.length > 0) { // continually search the data for connections for which 
     } else if (input.length === 2) {
         gate = input[0];
         right = input[1];
-    } else left = input[0];
+    } else right = input[0];
 
     if ((left && isNaN(left) && !M[left]) || (right && isNaN(right) && !M[right])) {
         d.push(c);  // if any input to the gate is a wire that has no signal,
