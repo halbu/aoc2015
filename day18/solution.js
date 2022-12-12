@@ -19,12 +19,12 @@ function next(x, y, cornersLit) {
 for (let cycles = 0; cycles != 100; ++cycles) {
   d = [...Array(100).keys()].map(i => [...Array(100).keys()].map(j => { return next(i, j, 0) } ).join(""));
 }
-console.log("Day 18 part 1 solution: " + d.map((l) => { return l.split("#").length - 1 }).reduce((a, b) => a + b))
+console.log("Day 18 part 1 solution: " + d.map(l => l.split("#").length - 1).reduce((a, b) => a + b))
 
-d = require('fs').readFileSync('data.txt').toString().split("\n").map(x => x.trim());         // Reset the grid
-[0, d.length - 1].forEach(x => [0, d.length - 1].forEach(y => d[x] = setChar(d[x], y, '#')))  // Pre-light corners
+d = require('fs').readFileSync('data.txt').toString().split("\n").map(x => x.trim());         // Reset grid
+[0, d.length - 1].forEach(x => [0, d.length - 1].forEach(y => d[x] = setChar(d[x], y, '#')))  // Light corners
 
 for (let cycles = 0; cycles != 100; ++cycles) {
   d = [...Array(100).keys()].map(i => [...Array(100).keys()].map(j => { return next(i, j, 1) } ).join(""));
 }
-console.log("Day 18 part 2 solution: " + d.map((l) => { return l.split("#").length - 1 }).reduce((a, b) => a + b))
+console.log("Day 18 part 2 solution: " + d.map(l => l.split("#").length - 1).reduce((a, b) => a + b))
